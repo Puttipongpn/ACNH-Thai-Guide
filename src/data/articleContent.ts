@@ -1,4 +1,6 @@
-export const islandVisitorEtiquetteContent = {
+import type { ArticleContentData } from "../types/content";
+
+export const islandVisitorEtiquetteContent: ArticleContentData = {
   label: "เรื่องควรรู้ก่อนเยี่ยมชมเกาะผู้อื่น",
   lead: [
     "การไปเกาะผู้อื่น โดยเฉพาะเกาะที่กำลังแจกของ ขายหัวผักกาด หรือเปิดรับผู้เล่นหลายคนพร้อมกัน ต้องอาศัยความร่วมมือจากผู้เยี่ยมชมทุกคน",

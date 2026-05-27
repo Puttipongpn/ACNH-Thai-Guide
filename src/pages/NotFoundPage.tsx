@@ -1,6 +1,7 @@
 import { InternalLink } from "../components/UI";
+import type { NavigableProps } from "../types/content";
 
-export default function NotFoundPage({ navigate }) {
+export default function NotFoundPage({ navigate }: NavigableProps) {
   return (
     <div className="page-container flex min-h-[60vh] flex-col items-center justify-center py-16 text-center">
       <span className="text-5xl" aria-hidden="true">

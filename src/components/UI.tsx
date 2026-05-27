@@ -1,4 +1,35 @@
-export function SectionHeading({ eyebrow, title, description, action }) {
+import type { ReactNode } from "react";
+import type { Navigate } from "../types/content";
+
+interface SectionHeadingProps {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  action?: ReactNode;
+}
+
+interface TagPillProps {
+  children: ReactNode;
+}
+
+interface InternalLinkProps {
+  to: string;
+  navigate: Navigate;
+  children: ReactNode;
+  className?: string;
+  ariaLabel?: string;
+}
+
+interface FacebookButtonProps {
+  url: string;
+  compact?: boolean;
+}
+
+interface CountBadgeProps {
+  count: number;
+}
+
+export function SectionHeading({ eyebrow, title, description, action }: SectionHeadingProps) {
   return (
     <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div>
@@ -11,11 +42,11 @@ export function SectionHeading({ eyebrow, title, description, action }) {
   );
 }
 
-export function TagPill({ children }) {
+export function TagPill({ children }: TagPillProps) {
   return <span className="tag-pill">{children}</span>;
 }
 
-export function InternalLink({ to, navigate, children, className = "", ariaLabel }) {
+export function InternalLink({ to, navigate, children, className = "", ariaLabel }: InternalLinkProps) {
   return (
     <a
       href={to}
@@ -31,7 +62,7 @@ export function InternalLink({ to, navigate, children, className = "", ariaLabel
   );
 }
 
-export function FacebookButton({ url, compact = false }) {
+export function FacebookButton({ url, compact = false }: FacebookButtonProps) {
   if (!url) {
     return (
       <span className={`button-muted ${compact ? "button-small" : ""}`} title="รอเพิ่มลิงก์ต้นทาง">
@@ -52,7 +83,7 @@ export function FacebookButton({ url, compact = false }) {
   );
 }
 
-export function CountBadge({ count }) {
+export function CountBadge({ count }: CountBadgeProps) {
   return (
     <span className="inline-flex items-center gap-1 rounded-full bg-white/65 px-3 py-1 text-xs font-medium text-muted">
       <span aria-hidden="true">📎</span> {count} ลิงก์

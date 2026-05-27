@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import type { Navigate } from "./types/content";
 import BottomNav from "./components/BottomNav";
 import Header from "./components/Header";
 import { getCategory, getGuide } from "./data/content";
@@ -8,7 +9,13 @@ import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import SearchPage from "./pages/SearchPage";
 
-function currentLocation() {
+interface LocationState {
+  pathname: string;
+  hash: string;
+  query: string;
+}
+
+function currentLocation(): LocationState {
   return {
     pathname: window.location.pathname,
     hash: window.location.hash,
@@ -35,10 +42,10 @@ export default function App() {
     }
   }, [location.pathname, location.hash, location.query]);
 
-  function navigate(to) {
+  const navigate: Navigate = (to) => {
     window.history.pushState({}, "", to);
     setLocation(currentLocation());
-  }
+  };
 
   function renderPage() {
     if (location.pathname === "/") return <HomePage navigate={navigate} />;

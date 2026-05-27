@@ -1,9 +1,15 @@
 import { getRelatedGuides } from "../data/content";
+import type { Category, Guide, NavigableProps } from "../types/content";
 import ArticleContent from "../components/ArticleContent";
 import { GuideCard } from "../components/Cards";
 import { FacebookButton, InternalLink, TagPill } from "../components/UI";
 
-export default function DetailPage({ guide, category, navigate }) {
+interface DetailPageProps extends NavigableProps {
+  guide: Guide;
+  category: Category;
+}
+
+export default function DetailPage({ guide, category, navigate }: DetailPageProps) {
   const relatedGuides = getRelatedGuides(guide);
 
   return (

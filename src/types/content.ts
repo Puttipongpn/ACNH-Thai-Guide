@@ -1,0 +1,77 @@
+import type { ReactNode } from "react";
+
+export type Navigate = (to: string) => void;
+
+export type CategoryColor = "sage" | "mint" | "sky" | "peach" | "rose" | "butter";
+
+export type GuideType = "guide" | "event" | "npc" | "tutorial" | "dlc" | "gardening" | "news" | "trivia";
+
+export interface Category {
+  id: string;
+  number: string;
+  icon: string;
+  shortName: string;
+  title: string;
+  description: string;
+  color: CategoryColor;
+  tags: string[];
+  sourceUrl: string;
+}
+
+export interface ArticleImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+export interface ArticleSection {
+  title: string;
+  paragraphs: string[];
+}
+
+export interface ArticleContentData {
+  label: string;
+  lead: string[];
+  coverImage?: ArticleImage;
+  alert?: {
+    title: string;
+    text: string;
+  };
+  sections: ArticleSection[];
+  checklist?: {
+    title: string;
+    items: string[];
+  };
+  closing?: string;
+}
+
+export interface Guide {
+  id: string;
+  categoryId: string;
+  title: string;
+  description: string;
+  type: GuideType;
+  tags: string[];
+  updatedAt: string;
+  sourceUrl: string;
+  month?: string;
+  featuredForNewPlayer?: boolean;
+  isThisMonth?: boolean;
+  articleContent?: ArticleContentData;
+  note?: string;
+  relatedIds: string[];
+}
+
+export interface NavigationItem {
+  label: string;
+  path: string;
+  icon?: string;
+}
+
+export interface NavigableProps {
+  navigate: Navigate;
+}
+
+export interface ChildrenProps {
+  children: ReactNode;
+}

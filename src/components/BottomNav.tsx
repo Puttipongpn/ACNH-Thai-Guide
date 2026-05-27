@@ -1,13 +1,18 @@
 import { InternalLink } from "./UI";
+import type { Navigate, NavigationItem } from "../types/content";
 
-const bottomItems = [
+const bottomItems: NavigationItem[] = [
   { label: "หน้าแรก", icon: "🏡", path: "/" },
   { label: "สารบัญ", icon: "📚", path: "/#all-guides" },
   { label: "ค้นหา", icon: "🔎", path: "/search" },
   { label: "News", icon: "📰", path: "/category/news" },
 ];
 
-export default function BottomNav({ navigate }) {
+interface BottomNavProps {
+  navigate: Navigate;
+}
+
+export default function BottomNav({ navigate }: BottomNavProps) {
   return (
     <nav className="bottom-nav sm:hidden" aria-label="ทางลัดมือถือ">
       {bottomItems.map((item) => (

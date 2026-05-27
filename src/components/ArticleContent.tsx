@@ -1,4 +1,10 @@
-export default function ArticleContent({ content }) {
+import type { ArticleContentData } from "../types/content";
+
+interface ArticleContentProps {
+  content?: ArticleContentData;
+}
+
+export default function ArticleContent({ content }: ArticleContentProps) {
   if (!content) return null;
 
   return (

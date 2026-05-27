@@ -1,7 +1,19 @@
 import { getCategory, getGuidesForCategory } from "../data/content";
+import type { Category, Guide, Navigate } from "../types/content";
 import { CountBadge, FacebookButton, InternalLink, TagPill } from "./UI";
 
-export function QuickCategoryCard({ category, navigate }) {
+interface CategoryCardProps {
+  category: Category;
+  navigate: Navigate;
+}
+
+interface GuideCardProps {
+  guide: Guide;
+  navigate: Navigate;
+  horizontal?: boolean;
+}
+
+export function QuickCategoryCard({ category, navigate }: CategoryCardProps) {
   return (
     <InternalLink
       to={`/category/${category.id}`}
@@ -17,7 +29,7 @@ export function QuickCategoryCard({ category, navigate }) {
   );
 }
 
-export function ContentCard({ category, navigate }) {
+export function ContentCard({ category, navigate }: CategoryCardProps) {
   const count = getGuidesForCategory(category.id).length;
 
   return (
@@ -43,7 +55,7 @@ export function ContentCard({ category, navigate }) {
   );
 }
 
-export function GuideCard({ guide, navigate, horizontal = false }) {
+export function GuideCard({ guide, navigate, horizontal = false }: GuideCardProps) {
   const category = getCategory(guide.categoryId);
 
   return (

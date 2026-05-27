@@ -3,6 +3,8 @@
 ต้นแบบเว็บไซต์สารบัญกลางสำหรับกลุ่ม `Animal Crossing: New Horizons` ภาษาไทย เน้นการใช้งานบนมือถือ โทนสมุดคู่มือเกาะที่อบอุ่น และโครงข้อมูลที่เติมลิงก์ Facebook จริงได้ในภายหลัง
 พัฒนาด้วน Codex ai
 
+สร้างด้วย `React + TypeScript + Tailwind CSS + Vite` โดยใช้ TypeScript ตรวจรูปแบบข้อมูลและ component props ก่อน build
+
 ## หน้าที่มีในต้นแบบ
 
 - `Home`: hero + ช่องค้นหา, quick categories, สารบัญทั้งหมด, ชุดอ่านสำหรับผู้เล่นใหม่ และรายการตามเดือนนี้
@@ -20,6 +22,7 @@ npm run dev
 สร้างไฟล์สำหรับ deploy:
 
 ```bash
+npm run typecheck
 npm run build
 ```
 
@@ -27,26 +30,28 @@ npm run build
 
 ```text
 src/
-  App.jsx                      # navigation และเลือก page จาก URL
-  data/content.js              # categories, guides, helpers สำหรับค้นหา
+  App.tsx                      # navigation และเลือก page จาก URL
+  types/content.ts             # type model ของหมวด ไกด์ และบทความ
+  data/content.ts              # categories, guides, helpers สำหรับค้นหา
+  data/articleContent.ts       # เนื้อหาบทความยาว
   components/
-    Header.jsx                 # desktop/mobile navigation
-    BottomNav.jsx              # ปุ่มทางลัดมือถือ
-    SearchBar.jsx              # ช่องค้นหาที่ใช้ซ้ำได้
-    Cards.jsx                  # QuickCategoryCard, ContentCard, GuideCard
-    ArticleContent.jsx         # แสดงเนื้อหาบทความยาวในหน้า Detail
-    UI.jsx                     # button/link, tag, heading, badge
+    Header.tsx                 # desktop/mobile navigation
+    BottomNav.tsx              # ปุ่มทางลัดมือถือ
+    SearchBar.tsx              # ช่องค้นหาที่ใช้ซ้ำได้
+    Cards.tsx                  # QuickCategoryCard, ContentCard, GuideCard
+    ArticleContent.tsx         # แสดงเนื้อหาบทความยาวในหน้า Detail
+    UI.tsx                     # button/link, tag, heading, badge
   pages/
-    HomePage.jsx
-    CategoryPage.jsx
-    DetailPage.jsx
-    SearchPage.jsx
-    NotFoundPage.jsx
+    HomePage.tsx
+    CategoryPage.tsx
+    DetailPage.tsx
+    SearchPage.tsx
+    NotFoundPage.tsx
 ```
 
 ## Data Structure
 
-ข้อมูลทั้งหมดอยู่ที่ `src/data/content.js` เพื่อให้เริ่มจากข้อมูลแบบ static ได้ง่าย แล้วค่อยย้ายไป CMS, Google Sheet export หรือ database ในอนาคต
+ข้อมูลทั้งหมดอยู่ที่ `src/data/content.ts` เพื่อให้เริ่มจากข้อมูลแบบ static ได้ง่าย และ TypeScript ช่วยตรวจรูปแบบข้อมูลก่อน build แล้วค่อยย้ายไป CMS, Google Sheet export หรือ database ในอนาคต
 
 ```js
 const category = {
@@ -84,7 +89,7 @@ const guide = {
 
 ### โพสต์แบบลิงก์สั้น
 
-เพิ่ม object ใหม่ใน array `guides` ที่ `src/data/content.js` โดยเลือก `categoryId` ให้ตรงกับหมวดที่ต้องการ รายการจะปรากฏในหน้า Category และค้นหาได้อัตโนมัติ
+เพิ่ม object ใหม่ใน array `guides` ที่ `src/data/content.ts` โดยเลือก `categoryId` ให้ตรงกับหมวดที่ต้องการ รายการจะปรากฏในหน้า Category และค้นหาได้อัตโนมัติ
 
 ```js
 {
@@ -102,7 +107,7 @@ const guide = {
 
 ### บทความยาว
 
-เก็บตัวเนื้อหาใน `src/data/articleContent.js` แล้วนำมาใส่ใน guide ด้วย field `articleContent` ตัวอย่างที่เพิ่มแล้วคือ `มารยาทสำคัญบนเกาะผู้อื่น`
+เก็บตัวเนื้อหาใน `src/data/articleContent.ts` แล้วนำมาใส่ใน guide ด้วย field `articleContent` ตัวอย่างที่เพิ่มแล้วคือ `มารยาทสำคัญบนเกาะผู้อื่น`
 
 ```js
 export const myArticleContent = {
@@ -117,7 +122,7 @@ export const myArticleContent = {
 };
 ```
 
-แล้ว import ไปใช้ใน `src/data/content.js`:
+แล้ว import ไปใช้ใน `src/data/content.ts`:
 
 ```js
 {

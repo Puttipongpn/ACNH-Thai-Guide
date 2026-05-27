@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { navItems } from "../data/content";
+import type { Navigate } from "../types/content";
 import { InternalLink } from "./UI";
 
-export default function Header({ navigate, currentPath }) {
+interface HeaderProps {
+  navigate: Navigate;
+  currentPath: string;
+}
+
+export default function Header({ navigate, currentPath }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  function visit(path) {
+  function visit(path: string) {
     setIsOpen(false);
     navigate(path);
   }

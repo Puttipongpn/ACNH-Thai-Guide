@@ -1,9 +1,10 @@
 import { categories, guides } from "../data/content";
+import type { NavigableProps } from "../types/content";
 import SearchBar from "../components/SearchBar";
 import { ContentCard, GuideCard, QuickCategoryCard } from "../components/Cards";
 import { InternalLink, SectionHeading } from "../components/UI";
 
-export default function HomePage({ navigate }) {
+export default function HomePage({ navigate }: NavigableProps) {
   const newPlayerGuides = guides.filter((guide) => guide.featuredForNewPlayer);
   const thisMonthGuides = guides.filter((guide) => guide.isThisMonth);
 

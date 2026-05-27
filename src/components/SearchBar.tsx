@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+import type { Navigate } from "../types/content";
 
-export default function SearchBar({ initialValue = "", navigate, compact = false }) {
+interface SearchBarProps {
+  initialValue?: string;
+  navigate: Navigate;
+  compact?: boolean;
+}
+
+export default function SearchBar({ initialValue = "", navigate, compact = false }: SearchBarProps) {
   const [query, setQuery] = useState(initialValue);
 
-  function submitSearch(event) {
+  function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const searchValue = query.trim();
     navigate(`/search${searchValue ? `?q=${encodeURIComponent(searchValue)}` : ""}`);

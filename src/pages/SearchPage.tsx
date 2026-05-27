@@ -1,9 +1,14 @@
 import { searchGuides } from "../data/content";
+import type { NavigableProps } from "../types/content";
 import SearchBar from "../components/SearchBar";
 import { GuideCard } from "../components/Cards";
 import { InternalLink } from "../components/UI";
 
-export default function SearchPage({ query, navigate }) {
+interface SearchPageProps extends NavigableProps {
+  query: string;
+}
+
+export default function SearchPage({ query, navigate }: SearchPageProps) {
   const results = searchGuides(query);
 
   return (

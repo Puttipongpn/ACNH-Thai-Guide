@@ -1,6 +1,7 @@
 import { islandVisitorEtiquetteContent } from "./articleContent";
+import type { Category, Guide, NavigationItem } from "../types/content";
 
-export const categories = [
+export const categories: Category[] = [
   {
     id: "rules-game",
     number: "Content 1",
@@ -124,7 +125,7 @@ export const categories = [
   },
 ];
 
-export const guides = [
+export const guides: Guide[] = [
   {
     id: "island-visitor-etiquette",
     categoryId: "rules-game",
@@ -307,7 +308,7 @@ export const guides = [
   },
 ];
 
-export const navItems = [
+export const navItems: NavigationItem[] = [
   { label: "หน้าแรก", path: "/" },
   { label: "สารบัญทั้งหมด", path: "/#all-guides" },
   { label: "ผู้เล่นใหม่", path: "/#new-player" },
@@ -317,23 +318,23 @@ export const navItems = [
   { label: "Search", path: "/search" },
 ];
 
-export function getCategory(categoryId) {
+export function getCategory(categoryId: string): Category | undefined {
   return categories.find((category) => category.id === categoryId);
 }
 
-export function getGuide(guideId) {
+export function getGuide(guideId: string): Guide | undefined {
   return guides.find((guide) => guide.id === guideId);
 }
 
-export function getGuidesForCategory(categoryId) {
+export function getGuidesForCategory(categoryId: string): Guide[] {
   return guides.filter((guide) => guide.categoryId === categoryId);
 }
 
-export function getRelatedGuides(guide) {
-  return (guide?.relatedIds || []).map(getGuide).filter(Boolean);
+export function getRelatedGuides(guide?: Guide): Guide[] {
+  return (guide?.relatedIds || []).map(getGuide).filter((relatedGuide): relatedGuide is Guide => Boolean(relatedGuide));
 }
 
-export function searchGuides(query) {
+export function searchGuides(query: string): Guide[] {
   const normalizedQuery = query.toLocaleLowerCase("th").trim();
   if (!normalizedQuery) return guides;
 

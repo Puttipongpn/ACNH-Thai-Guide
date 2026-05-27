@@ -1,9 +1,14 @@
 import { getGuidesForCategory } from "../data/content";
+import type { Category, NavigableProps } from "../types/content";
 import SearchBar from "../components/SearchBar";
 import { GuideCard } from "../components/Cards";
 import { FacebookButton, InternalLink, TagPill } from "../components/UI";
 
-export default function CategoryPage({ category, navigate }) {
+interface CategoryPageProps extends NavigableProps {
+  category: Category;
+}
+
+export default function CategoryPage({ category, navigate }: CategoryPageProps) {
   const categoryGuides = getGuidesForCategory(category.id);
 
   return (
