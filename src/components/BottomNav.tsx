@@ -5,7 +5,7 @@ const bottomItems: NavigationItem[] = [
   { label: "หน้าแรก", icon: "🏡", path: "/" },
   { label: "สารบัญ", icon: "📚", path: "/#all-guides" },
   { label: "ค้นหา", icon: "🔎", path: "/search" },
-  { label: "News", icon: "📰", path: "/category/news" },
+  { label: "News", icon: "📰", path: "/category/archive-and-news" },
 ];
 
 interface BottomNavProps {

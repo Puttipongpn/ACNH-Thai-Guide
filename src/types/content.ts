@@ -60,6 +60,23 @@ export interface Guide {
   articleContent?: ArticleContentData;
   note?: string;
   relatedIds: string[];
+  status?: "core" | "reference" | "archive" | "exclude";
+  priority?: 1 | 2 | 3 | 4 | 5;
+  audience?: string[];
+  imageCount?: number;
+  postAuthor?: string;
+  postedDate?: string;
+  sourceExcerpt?: string;
+  assetSummary?: string;
+  subLinks?: GuideSubLink[];
+}
+
+export interface GuideSubLink {
+  label: string;
+  description?: string;
+  url: string;
+  sourceUrl?: string;
+  kind?: "month" | "part" | "related";
 }
 
 export interface NavigationItem {

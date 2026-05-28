@@ -107,7 +107,23 @@ button {
   }
 
   .island-note {
-    @apply rotate-1 rounded-[1.75rem] border border-cream-deep bg-white/90 p-6 shadow-sm;
+    @apply rotate-1 rounded-[1.75rem] border border-cream-deep bg-white/90 shadow-sm;
+  }
+
+  .note-image {
+    @apply h-48 w-full object-cover;
+  }
+
+  .stat-chip {
+    @apply rounded-2xl border border-white/70 bg-white/65 p-4 shadow-sm;
+  }
+
+  .stat-chip strong {
+    @apply font-display block text-2xl text-ink;
+  }
+
+  .stat-chip span {
+    @apply mt-1 block text-xs font-medium text-muted;
   }
 
   .quick-grid {
@@ -138,12 +154,88 @@ button {
     @apply sm:flex sm:items-center sm:justify-between sm:gap-6;
   }
 
+  .guide-thumb {
+    @apply relative mb-4 block overflow-hidden rounded-2xl bg-cream-deep;
+  }
+
+  .guide-thumb-horizontal {
+    @apply sm:mb-0 sm:w-38 sm:shrink-0;
+  }
+
+  .guide-thumb img {
+    @apply h-38 w-full object-cover;
+  }
+
+  .guide-thumb span {
+    @apply absolute right-2 bottom-2 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold text-leaf-deep shadow-sm;
+  }
+
   .category-hero {
     @apply rounded-3xl border border-white/70 p-6 sm:p-9;
   }
 
   .detail-paper {
     @apply rounded-3xl border border-leaf/10 bg-white/80 p-6 shadow-sm sm:p-9;
+  }
+
+  .detail-cover {
+    @apply -mx-2 -mt-2 mb-7 overflow-hidden rounded-[1.5rem] bg-cream-deep sm:-mx-3 sm:-mt-3;
+  }
+
+  .detail-cover img {
+    @apply max-h-[28rem] w-full object-cover;
+  }
+
+  .detail-cover figcaption {
+    @apply bg-white/80 px-4 py-3 text-xs text-muted;
+  }
+
+  .source-excerpt {
+    @apply mt-7 rounded-2xl border border-leaf/15 bg-leaf-pale/45 p-5;
+  }
+
+  .source-excerpt p:last-child {
+    @apply text-sm leading-8 text-muted sm:text-base;
+  }
+
+  .sub-link-panel {
+    @apply mt-8 rounded-3xl border border-leaf/15 bg-white/65 p-5 sm:p-6;
+  }
+
+  .sub-link-grid {
+    @apply mt-5 grid gap-3 sm:grid-cols-2;
+  }
+
+  .sub-link-card {
+    @apply flex min-h-24 flex-col rounded-2xl border border-leaf/10 bg-cream/70 p-4 hover:-translate-y-0.5 hover:bg-leaf-pale/65;
+  }
+
+  .sub-link-card span {
+    @apply text-xl;
+  }
+
+  .sub-link-card strong {
+    @apply mt-2 font-display text-base text-ink;
+  }
+
+  .sub-link-card small {
+    @apply mt-1 text-xs leading-5 text-muted;
+  }
+
+  .image-gallery {
+    @apply grid gap-4 sm:grid-cols-2;
+  }
+
+  .image-gallery figure {
+    @apply overflow-hidden rounded-2xl border border-leaf/10 bg-white shadow-sm;
+  }
+
+  .image-gallery img {
+    @apply h-56 w-full object-cover;
+  }
+
+  .image-gallery figcaption {
+    @apply px-4 py-3 text-xs leading-6 text-muted;
   }
 
   .article-content {

@@ -10,6 +10,7 @@ interface CategoryPageProps extends NavigableProps {
 
 export default function CategoryPage({ category, navigate }: CategoryPageProps) {
   const categoryGuides = getGuidesForCategory(category.id);
+  const imageTotal = categoryGuides.reduce((total, guide) => total + (guide.imageCount || 0), 0);
 
   return (
     <div className="page-container py-8 pb-24 sm:py-12">
@@ -29,6 +30,10 @@ export default function CategoryPage({ category, navigate }: CategoryPageProps) 
               {category.tags.map((tag) => (
                 <TagPill key={tag}>{tag}</TagPill>
               ))}
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3 text-sm text-muted">
+              <span className="rounded-full bg-white/60 px-3 py-1.5">{categoryGuides.length} หัวข้อ</span>
+              <span className="rounded-full bg-white/60 px-3 py-1.5">{imageTotal} รูปประกอบ</span>
             </div>
           </div>
           <FacebookButton url={category.sourceUrl} />

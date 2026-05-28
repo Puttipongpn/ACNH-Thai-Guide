@@ -1,4 +1,5 @@
 import { getCategory, getGuidesForCategory } from "../data/content";
+import { getPostImageAsset } from "../data/postImageAssets";
 import type { Category, Guide, Navigate } from "../types/content";
 import { CountBadge, FacebookButton, InternalLink, TagPill } from "./UI";
 
@@ -57,19 +58,37 @@ export function ContentCard({ category, navigate }: CategoryCardProps) {
 
 export function GuideCard({ guide, navigate, horizontal = false }: GuideCardProps) {
   const category = getCategory(guide.categoryId);
+  const imageAsset = getPostImageAsset(guide.id);
+  const coverImage = imageAsset?.images[0];
 
   return (
     <article className={`guide-card ${horizontal ? "guide-card-horizontal" : ""}`}>
+      {coverImage && (
+        <InternalLink
+          to={`/article/${guide.id}`}
+          navigate={navigate}
+          className={`guide-thumb ${horizontal ? "guide-thumb-horizontal" : ""}`}
+          ariaLabel={`เปิด ${guide.title}`}
+        >
+          <img src={coverImage.src} alt={coverImage.alt} loading="lazy" />
+          <span>{imageAsset.imageCount} รูป</span>
+        </InternalLink>
+      )}
       <div className="min-w-0 flex-1">
         <div className="mb-3 flex flex-wrap items-center gap-2">
           <TagPill>{category?.shortName}</TagPill>
+          {guide.status === "core" && <TagPill>แนะนำ</TagPill>}
           {guide.tags.slice(0, 2).map((tag) => (
             <TagPill key={tag}>{tag}</TagPill>
           ))}
         </div>
         <h3 className="font-display text-lg font-bold text-ink">{guide.title}</h3>
         <p className="mt-2 text-sm leading-7 text-muted">{guide.description}</p>
-        {guide.updatedAt && <p className="mt-3 text-xs text-muted">อัปเดต: {guide.updatedAt}</p>}
+        <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted">
+          {guide.updatedAt && <span>{guide.updatedAt}</span>}
+          {guide.imageCount ? <span>มีรูปประกอบ {guide.imageCount} รูป</span> : null}
+          {guide.subLinks?.length ? <span>มีหัวข้อย่อย {guide.subLinks.length} รายการ</span> : null}
+        </div>
       </div>
       <div className={`flex flex-wrap gap-2 ${horizontal ? "sm:shrink-0" : "mt-5"}`}>
         <InternalLink to={`/article/${guide.id}`} navigate={navigate} className="button-primary">
