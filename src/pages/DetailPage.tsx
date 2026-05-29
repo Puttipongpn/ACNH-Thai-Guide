@@ -1,6 +1,6 @@
 import { getRelatedGuides } from "../data/content";
 import { getPostImageAsset } from "../data/postImageAssets";
-import type { Category, Guide, NavigableProps } from "../types/content";
+import type { ArticleContentBlock, Category, Guide, NavigableProps } from "../types/content";
 import ArticleContent from "../components/ArticleContent";
 import { GuideCard } from "../components/Cards";
 import { FacebookButton, InternalLink, TagPill } from "../components/UI";
@@ -10,10 +10,26 @@ interface DetailPageProps extends NavigableProps {
   category: Category;
 }
 
+function imageSourcesFromBlocks(blocks: ArticleContentBlock[] = []): string[] {
+  return blocks.flatMap((block) => {
+    if (block.type === "image") return [block.image.src];
+    if (block.type === "gallery") return block.images.map((image) => image.src);
+    return [];
+  });
+}
+
 export default function DetailPage({ guide, category, navigate }: DetailPageProps) {
   const relatedGuides = getRelatedGuides(guide);
   const imageAsset = getPostImageAsset(guide.id);
-  const coverImage = imageAsset?.images[0];
+  const coverImage = guide.articleContent?.coverImage || imageAsset?.images[0];
+  const coverCaption = guide.articleContent?.coverImage?.caption || `${imageAsset?.title || "รูปประกอบบทความ"} · รูปจากโพสต์ต้นทาง`;
+  const usedImageSources = new Set([
+    ...(coverImage ? [coverImage.src] : []),
+    ...(guide.articleContent?.coverImage ? [guide.articleContent.coverImage.src] : []),
+    ...imageSourcesFromBlocks(guide.articleContent?.body),
+    ...(guide.articleContent?.sections || []).flatMap((section) => imageSourcesFromBlocks(section.blocks)),
+  ]);
+  const additionalImages = imageAsset?.images.filter((image) => !usedImageSources.has(image.src)) || [];
 
   return (
     <div className="page-container max-w-4xl py-8 pb-24 sm:py-12">
@@ -24,7 +40,7 @@ export default function DetailPage({ guide, category, navigate }: DetailPageProp
         {coverImage && (
           <figure className="detail-cover">
             <img src={coverImage.src} alt={coverImage.alt} />
-            <figcaption>{imageAsset?.title} · รูปจากโพสต์ต้นทาง</figcaption>
+            <figcaption>{coverCaption}</figcaption>
           </figure>
         )}
         <div className="mb-5 flex flex-wrap gap-2">
@@ -73,27 +89,6 @@ export default function DetailPage({ guide, category, navigate }: DetailPageProp
             </div>
           </section>
         )}
-        {imageAsset && (
-          <section className="mt-8">
-            <div className="mb-4 flex items-end justify-between gap-4">
-              <div>
-                <p className="eyebrow">รูปจากโพสต์หลัก</p>
-                <h2 className="font-display text-xl font-bold text-ink">{imageAsset.imageCount} รูปที่เก็บไว้</h2>
-                <p className="mt-2 text-sm leading-7 text-muted">
-                  ใช้เป็นภาพอ้างอิงจากโพสต์ต้นทาง ไม่ได้ตีความแทนเจ้าของโพสต์ รูปไหนเป็นเนื้อหาหลักจะอยู่ใกล้สรุปของโพสต์นั้น
-                </p>
-              </div>
-            </div>
-            <div className="image-gallery">
-              {imageAsset.images.map((image) => (
-                <figure key={image.imageId}>
-                  <img src={image.src} alt={image.alt} loading="lazy" />
-                  <figcaption>{image.caption}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </section>
-        )}
         {guide.articleContent ? (
           <ArticleContent content={guide.articleContent} />
         ) : (
@@ -104,6 +99,27 @@ export default function DetailPage({ guide, category, navigate }: DetailPageProp
                 และข้อมูลหลักที่อ่านได้บนเว็บ ก่อนค่อยเติมรายละเอียดเชิงลึกเพิ่มในรอบถัดไป
               </p>
               <p>{guide.assetSummary || guide.description}</p>
+            </div>
+          </section>
+        )}
+        {imageAsset && additionalImages.length > 0 && (
+          <section className="mt-8">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="eyebrow">รูปเพิ่มเติมจากโพสต์</p>
+                <h2 className="font-display text-xl font-bold text-ink">{additionalImages.length} รูปที่เก็บไว้</h2>
+                <p className="mt-2 text-sm leading-7 text-muted">
+                  รูปในส่วนนี้เป็นภาพอ้างอิงเพิ่มจากโพสต์ต้นทาง สามารถดึงรูปไปแทรกในเนื้อหาด้านบนได้เมื่อสรุปเป็นบทความแล้ว
+                </p>
+              </div>
+            </div>
+            <div className="image-gallery">
+              {additionalImages.map((image) => (
+                <figure key={image.imageId}>
+                  <img src={image.src} alt={image.alt} loading="lazy" />
+                  <figcaption>{image.caption}</figcaption>
+                </figure>
+              ))}
             </div>
           </section>
         )}

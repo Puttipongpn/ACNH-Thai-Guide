@@ -1,7 +1,17 @@
-import { islandVisitorEtiquetteContent } from "./articleContent";
+import { beginnerWalkthroughMainContent, islandVisitorEtiquetteContent, monthlyGuideJanuaryContent } from "./articleContent";
 import { curatedCategories, curatedGuides, type CuratedCategoryId, type CuratedGuide } from "./curatedContent";
+import { monthlyImportedContentByGuideId } from "./monthlyImportedContent";
 import { getPostImageAsset } from "./postImageAssets";
-import type { ArticleContentData, Category, CategoryColor, Guide, GuideSubLink, GuideType, NavigationItem } from "../types/content";
+import type {
+  ArticleContentBlock,
+  ArticleContentData,
+  Category,
+  CategoryColor,
+  Guide,
+  GuideSubLink,
+  GuideType,
+  NavigationItem,
+} from "../types/content";
 
 const categoryTone: Record<CuratedCategoryId, { color: CategoryColor; tags: string[] }> = {
   "start-here": { color: "sage", tags: ["rules", "online", "NSO"] },
@@ -260,7 +270,12 @@ const mappedCuratedGuides: Guide[] = visibleCuratedGuides.map((guide) => {
       guide.categoryId === "monthly-and-events" ||
       guide.id.includes("seasonal") ||
       guide.id.includes("news-2026"),
-    articleContent: guide.id === "island-visitor-etiquette" ? islandVisitorEtiquetteContent : undefined,
+    articleContent:
+      guide.id === "island-visitor-etiquette"
+        ? islandVisitorEtiquetteContent
+        : guide.id === "beginner-walkthrough-main"
+          ? beginnerWalkthroughMainContent
+          : undefined,
     note:
       guide.sourceNote === "verify_official_source_before_featured"
         ? "ข่าวนี้ควรตรวจสอบกับแหล่ง official ก่อนนำขึ้นเป็นข้อมูลเด่น"
@@ -280,27 +295,36 @@ const mappedCuratedGuides: Guide[] = visibleCuratedGuides.map((guide) => {
   };
 });
 
-const monthlyGuides: Guide[] = monthlyGuideSeeds.map((month, index) => ({
-  id: month.id,
-  categoryId: "monthly-and-events",
-  title: `ไกด์ประจำเดือน${month.thaiMonth}`,
-  description: month.summary,
-  type: "guide",
-  tags: ["รายเดือน", "monthly", month.thaiMonth, ...month.highlights],
-  updatedAt: "เรียบเรียงจากสารบัญรายเดือนของกลุ่ม",
-  sourceUrl: month.sourceUrl,
-  month: month.thaiMonth,
-  featuredForNewPlayer: false,
-  isThisMonth: true,
-  articleContent: createMonthlyArticleContent(month),
-  note: "หน้านี้เป็นข้อมูลรายเดือนในเว็บเราเอง ลิงก์ Facebook ใช้เป็นต้นทางอ้างอิง ไม่ใช่ปลายทางหลักของการอ่าน",
-  relatedIds: ["monthly-checklist-index"],
-  status: "core",
-  priority: ((index % 5) + 1) as 1 | 2 | 3 | 4 | 5,
-  audience: ["regular-player", "collector"],
-  imageCount: 0,
-  sourceExcerpt: month.summary,
-}));
+const monthlyGuides: Guide[] = monthlyGuideSeeds.map((month, index) => {
+  const asset = getPostImageAsset(month.id);
+
+  return {
+    id: month.id,
+    categoryId: "monthly-and-events",
+    title: `ไกด์ประจำเดือน${month.thaiMonth}`,
+    description: asset?.summary || month.summary,
+    type: "guide",
+    tags: ["รายเดือน", "monthly", month.thaiMonth, ...month.highlights],
+    updatedAt: asset?.postedDate ? `โพสต์ต้นทาง: ${asset.postedDate}` : "เรียบเรียงจากสารบัญรายเดือนของกลุ่ม",
+    sourceUrl: asset?.sourceUrl || month.sourceUrl,
+    month: month.thaiMonth,
+    featuredForNewPlayer: false,
+    isThisMonth: true,
+    articleContent:
+      monthlyImportedContentByGuideId[month.id] ??
+      (month.id === "monthly-guide-january" ? monthlyGuideJanuaryContent : createMonthlyArticleContent(month)),
+    note: "หน้านี้เป็นข้อมูลรายเดือนในเว็บเราเอง ลิงก์ Facebook ใช้เป็นต้นทางอ้างอิง ไม่ใช่ปลายทางหลักของการอ่าน",
+    relatedIds: ["monthly-checklist-index"],
+    status: "core",
+    priority: ((index % 5) + 1) as 1 | 2 | 3 | 4 | 5,
+    audience: ["regular-player", "collector"],
+    imageCount: asset?.imageCount ?? 0,
+    postAuthor: asset?.postAuthor,
+    postedDate: asset?.postedDate,
+    sourceExcerpt: asset?.sourceExcerpt || month.summary,
+    assetSummary: asset?.summary,
+  };
+});
 
 export const guides: Guide[] = [...mappedCuratedGuides, ...monthlyGuides];
 
@@ -330,6 +354,18 @@ export function getRelatedGuides(guide?: Guide): Guide[] {
   return (guide?.relatedIds || []).map(getGuide).filter((relatedGuide): relatedGuide is Guide => Boolean(relatedGuide));
 }
 
+function textFromArticleBlocks(blocks: ArticleContentBlock[] = []): string[] {
+  return blocks
+    .flatMap((block) => {
+      if (block.type === "paragraph") return [block.text];
+      if (block.type === "image") return [block.image.alt, block.image.caption];
+      if (block.type === "gallery") return block.images.flatMap((image) => [image.alt, image.caption]);
+      if (block.type === "note") return [block.title, block.text];
+      return [block.title, ...block.items];
+    })
+    .filter((text): text is string => Boolean(text));
+}
+
 export function searchGuides(query: string): Guide[] {
   const normalizedQuery = query.toLocaleLowerCase("th").trim();
   if (!normalizedQuery) return guides;
@@ -340,9 +376,14 @@ export function searchGuides(query: string): Guide[] {
       ? [
           guide.articleContent.label,
           ...(guide.articleContent.lead || []),
+          ...textFromArticleBlocks(guide.articleContent.body),
           guide.articleContent.alert?.title,
           guide.articleContent.alert?.text,
-          ...(guide.articleContent.sections || []).flatMap((section) => [section.title, ...(section.paragraphs || [])]),
+          ...(guide.articleContent.sections || []).flatMap((section) => [
+            section.title,
+            ...(section.paragraphs || []),
+            ...textFromArticleBlocks(section.blocks),
+          ]),
           guide.articleContent.checklist?.title,
           ...(guide.articleContent.checklist?.items || []),
           guide.articleContent.closing,

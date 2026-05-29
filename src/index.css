@@ -246,6 +246,34 @@ button {
     @apply space-y-3 text-base leading-8 text-ink;
   }
 
+  .article-block-paragraph {
+    @apply mt-5 text-sm leading-8 text-muted sm:text-base;
+  }
+
+  .article-inline-image {
+    @apply mt-6 overflow-hidden rounded-2xl border border-leaf/10 bg-white shadow-sm;
+  }
+
+  .article-inline-image-wide {
+    @apply sm:-mx-3;
+  }
+
+  .article-inline-image img {
+    @apply max-h-[34rem] w-full object-contain;
+  }
+
+  .article-inline-image figcaption {
+    @apply bg-white/85 px-4 py-3 text-xs leading-6 text-muted;
+  }
+
+  .article-inline-gallery {
+    @apply mt-6 grid gap-4 sm:grid-cols-2;
+  }
+
+  .article-inline-gallery .article-inline-image {
+    @apply mt-0;
+  }
+
   .article-alert {
     @apply mt-7 rounded-2xl border border-rose-pale bg-rose-pale/60 p-5 sm:p-6;
   }
@@ -271,8 +299,24 @@ button {
     @apply mt-3 text-sm leading-8 text-muted sm:text-base;
   }
 
+  .article-note {
+    @apply mt-6 rounded-2xl border border-butter-pale bg-butter-pale/55 p-5 sm:p-6;
+  }
+
+  .article-note h3 {
+    @apply font-display text-base font-bold text-ink;
+  }
+
+  .article-note p {
+    @apply mt-2 text-sm leading-7 text-muted sm:text-base;
+  }
+
   .article-checklist {
     @apply mt-9 rounded-2xl bg-leaf-pale/70 p-5 sm:p-6;
+  }
+
+  .article-checklist-inline {
+    @apply mt-6;
   }
 
   .article-checklist ul {

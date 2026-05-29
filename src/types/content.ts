@@ -24,15 +24,42 @@ export interface ArticleImage {
   caption?: string;
 }
 
+export type ArticleContentBlock =
+  | {
+      type: "paragraph";
+      text: string;
+    }
+  | {
+      type: "image";
+      image: ArticleImage;
+      size?: "normal" | "wide";
+    }
+  | {
+      type: "gallery";
+      images: ArticleImage[];
+    }
+  | {
+      type: "note";
+      title?: string;
+      text: string;
+    }
+  | {
+      type: "checklist";
+      title?: string;
+      items: string[];
+    };
+
 export interface ArticleSection {
   title: string;
-  paragraphs: string[];
+  paragraphs?: string[];
+  blocks?: ArticleContentBlock[];
 }
 
 export interface ArticleContentData {
   label: string;
   lead: string[];
   coverImage?: ArticleImage;
+  body?: ArticleContentBlock[];
   alert?: {
     title: string;
     text: string;

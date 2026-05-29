@@ -1,3 +1,5 @@
+import { monthlyImportedPostImageAssets } from "./monthlyImportedAssets";
+
 export interface PostImageAsset {
   imageId: string;
   order: number;
@@ -112,6 +114,20 @@ export const curatedPostImageAssets: CuratedPostImageAsset[] = [
       "Monthly Guide รวมลิงก์ไกด์รายเดือนตั้งแต่มกราคมถึงธันวาคม เพื่อช่วยตั้งเป้าหมายและเช็กสิ่งที่เกิดขึ้นในแต่ละเดือน",
     imageCount: 1,
     images: makeImages("monthly-checklist-index", "สารบัญไกด์รายเดือน", 1),
+  },
+  {
+    guideId: "monthly-guide-january",
+    sourcePostId: "1861342020953361",
+    sourceUrl: "https://www.facebook.com/groups/AnixNewHorizonsTH/posts/1861342020953361/",
+    postAuthor: "Marie Furry",
+    postedDate: "29 ธันวาคม 2023",
+    title: "ACNH All in January",
+    summary:
+      "รวมไฮไลต์เดือนมกราคมใน ACNH ทั้ง New Year's Day, สภาพอากาศ, พุ่มไม้, seasonal items, กิจกรรม, DIY, critters และ birthday list",
+    sourceExcerpt:
+      "January Update - Event, Seasonal Items, DIYs & Change in ACNH เดือนแรกของปี เป็นเดือนที่สองของฤดูหนาวในซีกโลกเหนือและฤดูร้อนในซีกโลกใต้ พร้อมไฮไลต์ New Year's Day และรายการที่ควรเช็กประจำเดือน",
+    imageCount: 31,
+    images: makeImages("monthly-guide-january", "ACNH All in January", 31),
   },
   {
     guideId: "events-index",
@@ -257,5 +273,9 @@ export const curatedPostImageAssets: CuratedPostImageAsset[] = [
 ];
 
 export function getPostImageAsset(guideId: string): CuratedPostImageAsset | undefined {
-  return curatedPostImageAssets.find((asset) => asset.guideId === guideId);
+  return [...curatedPostImageAssets, ...monthlyImportedPostImageAssets].find((asset) => asset.guideId === guideId);
+}
+
+export function getPostImage(guideId: string, order: number): PostImageAsset | undefined {
+  return getPostImageAsset(guideId)?.images.find((image) => image.order === order);
 }
